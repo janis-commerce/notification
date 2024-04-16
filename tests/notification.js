@@ -66,7 +66,7 @@ describe('Notification', () => {
 			await assert.rejects(notificationInstance.send({ body: { id: '132456' } }));
 		});
 
-		it('Should reject if pass invalid notification properties in send method parameter', async () => {
+		it('Should reject if passing invalid notification properties in send method parameter', async () => {
 
 			const notificationInstance = new Notification();
 

@@ -1,10 +1,10 @@
 {
 	"name": "@janiscommerce/notification",
 	"version": "1.0.0",
-	"description": "A package to handle Notifications in JANIS Services",
+	"description": "A package to send notifications to Janis Notification service",
 	"main": "lib/index.js",
 	"scripts": {
-		"test": "mocha --exit -R nyan --require tests/bootstrap.js --recursive tests/ --no-deprecation",
+		"test": "mocha --exit -R nyan --recursive tests/ --no-deprecation",
 		"watch-test": "export TEST_ENV=true; mocha --exit -R nyan -w --recursive tests/ --no-deprecation",
 		"test-ci": "nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/ --no-deprecation",
 		"coverage": "nyc npm test",
