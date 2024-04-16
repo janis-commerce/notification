@@ -68,10 +68,12 @@ const notificationSample = {
 	}
 };
 
+const notificationInstance = new Notification();
+
 // Without clientCode
-await Notfication.send(notificationSample);
+await notificationInstance.send(notificationSample);
 
 // With clientCode
-await Notfication.send(notificationSample, clientCode);
+await notificationInstance.send(notificationSample, clientCode);
 
 ```
