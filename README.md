@@ -20,18 +20,19 @@ const { ServerlessConfiguration } = require('@janiscommerce/notification');
 
 const functions = require('./serverless/functions');
 
+// const NOTIFICATION_ACCOUNT_ID = Setting.get() || process.env.variableName;
+
 module.exports = helper({
 	hooks: [
 		...otherHooks,
 
-		...ServerlessConfiguration(),
+		// The package use `process.env.NOTIFICATION_ACCOUNT_ID` variable required and the account id is different in each environment.
+		...ServerlessConfiguration(NOTIFICATION_ACCOUNT_ID),
 
 		...functions
 	]
 });
 ```
-In addition to this, an environment variable must be set for the service notification account id.
-The package use `process.env.NOTIFICATION ACCOUNT ID` variable required and the account id is different in each environment.
 
 ### Usage
 
