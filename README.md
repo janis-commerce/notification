@@ -52,7 +52,8 @@ Method for send notification to Notification Service
 
 - **clientCode**(*Optional|String*) - ClientCode to inject in notification
 
-Method
+#### Example
+
 ```js
 const { Notification } = require('@janiscommerce/notification');
 
