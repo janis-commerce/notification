@@ -21,7 +21,7 @@ describe('Serveless Configuration', () => {
 
 			['iamStatement', {
 				action: ['sqs:SendMessage'],
-				resource: `arn:aws:sqs:\${aws:region}${NOTIFICATION_ACCOUNT_ID}:*`
+				resource: `arn:aws:sqs:\${aws:region}:${NOTIFICATION_ACCOUNT_ID}:*`
 			}]
 		]);
 	});
