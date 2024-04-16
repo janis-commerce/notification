@@ -41,6 +41,7 @@
 		"test": "tests"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sqs": "^3.552.0"
+		"@aws-sdk/client-sqs": "^3.552.0",
+		"@janiscommerce/superstruct": "^1.2.1"
 	}
 }

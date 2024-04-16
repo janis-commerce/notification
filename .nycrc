@@ -5,6 +5,9 @@
   "extension": [
     ".js"
   ],
+  "exclude": [
+    "lib/serverless-configuration.js"
+  ],
   "cache": true,
   "all": true,
   "default-excludes": true,
