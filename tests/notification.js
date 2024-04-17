@@ -63,69 +63,68 @@ describe('Notification', () => {
 
 			const notificationInstance = new Notification();
 
-			await assert.rejects(notificationInstance.send({ body: { id: '132456' } }));
+			await assert.rejects(notificationInstance.send({ entity: 'entityName', body: { id: '132456' } }));
 		});
 
-		it('Should reject if passing invalid notification properties in send method parameter', async () => {
+		it('Should reject if not passing notification.entity in send method parameter', async () => {
 
 			const notificationInstance = new Notification();
 
-			await assert.rejects(notificationInstance.send({ body: null }));
+			await assert.rejects(notificationInstance.send({ event: 'eventName', body: { id: '132456' } }));
+		});
 
-			await assert.rejects(notificationInstance.send({ event: null }));
+		['event', 'entity', 'body'].forEach(property => {
+
+			it(`Should reject if passing invalid notification.${property} in send method parameter`, async () => {
+
+				const notificationInstance = new Notification();
+
+				await assert.rejects(notificationInstance.send({
+					event: 'eventName',
+					entity: 'entityNmae',
+					body: { id: '132456' },
+					[property]: null
+				}));
+			});
+
 		});
 
 	});
 
 	describe('When validation does not fail', () => {
 
+		const notificationSample = {
+			event: 'eventName',
+			entity: 'entityName',
+			body: { id: '132456' }
+		};
+
+		const inputSample = {
+			MessageBody: '{"event":"eventName","entity":"entityName","body":{"id":"132456"},"service":"serviceName"}',
+			QueueUrl: 'https://sqs.us-east-1.amazonaws.com/012345678901/PlaygroundMessageProcessorQueue'
+		};
+
 		it('Should send the notification successfully (without clientCode)', async () => {
 
 			const notificationInstance = new Notification();
 
-			await notificationInstance.send({
-				event: 'service-event-name',
-				body: {
-					id: '132456'
-				}
-			});
+			await notificationInstance.send(notificationSample);
 
-			sinon.assert.calledOnceWithExactly(SQSClient.prototype.send, sinon.match({
-				input: {
-					MessageBody: '{"event":"service-event-name","body":{"id":"132456"}}',
-					QueueUrl: 'https://sqs.us-east-1.amazonaws.com/012345678901/PlaygroundMessageProcessorQueue',
-					MessageAttributes: {
-						service: {
-							StringValue: 'serviceName',
-							DataType: 'String'
-						}
-					}
-				}
-			}));
+			sinon.assert.calledOnceWithExactly(SQSClient.prototype.send, sinon.match({ input: inputSample }));
 		});
 
 		it('Should send the notification successfully (with clientCode)', async () => {
 
 			const notificationInstance = new Notification();
 
-			await notificationInstance.send({
-				event: 'service-event-name',
-				body: {
-					id: '132456'
-				}
-			}, 'defaultClient');
+			await notificationInstance.send(notificationSample, 'defaultClient');
 
 			sinon.assert.calledOnceWithExactly(SQSClient.prototype.send, sinon.match({
 				input: {
-					MessageBody: '{"event":"service-event-name","body":{"id":"132456"}}',
-					QueueUrl: 'https://sqs.us-east-1.amazonaws.com/012345678901/PlaygroundMessageProcessorQueue',
+					...inputSample,
 					MessageAttributes: {
 						'janis-client': {
 							StringValue: 'defaultClient',
-							DataType: 'String'
-						},
-						service: {
-							StringValue: 'serviceName',
 							DataType: 'String'
 						}
 					}

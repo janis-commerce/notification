@@ -48,7 +48,8 @@ Method for send notification to Notification Service
 **Parameters**
 
 - **notification**(*Required|Object*) - Notification object data
-- - **event** (*Required|String*)  - Event notification identifier
+- - **event** (*Required|String*) - Event notification identifier
+- - **entity** (*Required|String*) - Service entity name
 - - **body** (*Optional|Object*) - Additional notification data
 
 - **clientCode**(*Optional|String*) - ClientCode to inject in notification
@@ -59,7 +60,8 @@ Method for send notification to Notification Service
 const { Notification } = require('@janiscommerce/notification');
 
 const notificationSample = {
-	event: 'service:entity:ready',
+	event: 'ready',
+	entity: 'entity',
 	body: {
 		id: '5de565c07de99000110dcdef',
 		moreData: {
@@ -78,3 +80,5 @@ await notificationInstance.send(notificationSample);
 await notificationInstance.send(notificationSample, clientCode);
 
 ```
+
+Additionally, the property ***service*** with the service name is automatically added to the notification.
