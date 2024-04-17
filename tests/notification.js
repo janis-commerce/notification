@@ -101,7 +101,7 @@ describe('Notification', () => {
 
 		const inputSample = {
 			MessageBody: '{"event":"eventName","entity":"entityName","body":{"id":"132456"},"service":"serviceName"}',
-			QueueUrl: 'https://sqs.us-east-1.amazonaws.com/012345678901/PlaygroundMessageProcessorQueue'
+			QueueUrl: 'https://sqs.us-east-1.amazonaws.com/012345678901/NotificationMessageProcessorQueue'
 		};
 
 		it('Should send the notification successfully (without clientCode)', async () => {
