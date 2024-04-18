@@ -132,6 +132,26 @@ describe('Notification', () => {
 			}));
 		});
 
+		it('Should send the notification successfully (with clientCode and userId)', async () => {
+
+			const notificationInstance = new Notification();
+
+			await notificationInstance.send({ ...notificationSample, userId: '65cd1b55c64236fcc641ddcf' }, 'defaultClient');
+
+			sinon.assert.calledOnceWithExactly(SQSClient.prototype.send, sinon.match({
+				input: {
+					...inputSample,
+					MessageBody: '{"event":"eventName","entity":"entityName","body":{"id":"132456"},"userId":"65cd1b55c64236fcc641ddcf","service":"serviceName"}',
+					MessageAttributes: {
+						'janis-client': {
+							StringValue: 'defaultClient',
+							DataType: 'String'
+						}
+					}
+				}
+			}));
+		});
+
 	});
 
 });

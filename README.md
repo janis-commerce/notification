@@ -50,6 +50,7 @@ Method for send notification to Notification Service
 - **notification**(*Required|Object*) - Notification object data
 - - **event** (*Required|String*) - Event notification identifier
 - - **entity** (*Required|String*) - Service entity name
+- - **userId** (*Optional|String*) - User Id
 - - **body** (*Optional|Object*) - Additional notification data
 
 - **clientCode**(*Optional|String*) - ClientCode to inject in notification
