@@ -23,6 +23,26 @@ describe('Notification', () => {
 		sinon.restore();
 	});
 
+	it('Should return expected configuration', () => {
+
+		const NOTIFICATION_ACCOUNT_ID = '555555555555';
+
+		const config = Notification.serverlessConfiguration(NOTIFICATION_ACCOUNT_ID);
+
+		assert.deepEqual(config, [
+			['envVars', {
+				// eslint-disable-next-line no-template-curly-in-string
+				SQS_BASE_URL: 'https://sqs.${aws:region}.amazonaws.com',
+				NOTIFICATION_ACCOUNT_ID
+			}],
+
+			['iamStatement', {
+				action: ['sqs:SendMessage'],
+				resource: `arn:aws:sqs:\${aws:region}:${NOTIFICATION_ACCOUNT_ID}:*`
+			}]
+		]);
+	});
+
 	describe('When validation fails', () => {
 
 		it('Should reject if JANIS_SERVICE_NAME is not defined', async () => {

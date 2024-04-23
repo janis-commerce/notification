@@ -10,13 +10,13 @@ npm install @janiscommerce/notification
 
 ### Configuration
 
-To use the notification package, first use the ServerlessConfiguration function to set some iamStatement and environment variables within the serverless hooks.
+To use the notification package, first use the Notification.serverlessConfiguration function to set some iamStatement and environment variables within the serverless hooks.
 
 ```js
 
 const { helper } = require('sls-helper');
 
-const { ServerlessConfiguration } = require('@janiscommerce/notification');
+const { Notification } = require('@janiscommerce/notification');
 
 const functions = require('./serverless/functions');
 
@@ -27,7 +27,7 @@ module.exports = helper({
 		...otherHooks,
 
 		// The package use `process.env.NOTIFICATION_ACCOUNT_ID` variable required and the account id is different in each environment.
-		...ServerlessConfiguration(NOTIFICATION_ACCOUNT_ID),
+		...Notification.serverlessConfiguration(NOTIFICATION_ACCOUNT_ID),
 
 		...functions
 	]
