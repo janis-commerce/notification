@@ -20,19 +20,22 @@ const { Notification } = require('@janiscommerce/notification');
 
 const functions = require('./serverless/functions');
 
-// const NOTIFICATION_ACCOUNT_ID = Setting.get() || process.env.variableName;
-
 module.exports = helper({
 	hooks: [
 		...otherHooks,
 
-		// The package use `process.env.NOTIFICATION_ACCOUNT_ID` variable required and the account id is different in each environment.
-		...Notification.serverlessConfiguration(NOTIFICATION_ACCOUNT_ID),
+		...Notification.serverlessConfiguration,
 
 		...functions
 	]
 });
 ```
+
+### ENV variables
+
+- **JANIS_SERVICE_NAME** (required): The name of the service.
+- **NOTIFICATION_ACCOUNT_ID** (required) - The notification service account id.
+- **SQS_BASE_URL** (required) - SQS base url. This variable is set by ***Notification.serverlessConfiguration***
 
 ### Usage
 
