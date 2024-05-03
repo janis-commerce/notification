@@ -55,14 +55,20 @@ describe('Notification', () => {
 
 	describe('When validation fails', () => {
 
-		Object.keys(env).forEach(envVarName => {
+		const envErrorsMapper = {
+			JANIS_SERVICE_NAME: 'Service name is not defined',
+			SQS_BASE_URL: 'Sqs base url is not defined',
+			NOTIFICATION_ACCOUNT_ID: 'Notification account id is not defined'
+		};
+
+		Object.entries(envErrorsMapper).forEach(([envVarName, envVarError]) => {
 			it(`Should reject if ${envVarName} is not defined`, async () => {
 
 				process.env[envVarName] = '';
 
 				const notificationInstance = new Notification();
 
-				await assert.rejects(notificationInstance.send(), { message: `${envVarName} variable is not defined` });
+				await assert.rejects(notificationInstance.send(), envVarError);
 			});
 		});
 
