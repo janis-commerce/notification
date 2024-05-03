@@ -16,74 +16,71 @@ const env = {
 
 describe('Notification', () => {
 
+	let oldEnv;
+
 	beforeEach(() => {
-		process.env = { ...env };
+
+		oldEnv = { ...process.env };
+
+		Object.entries(env).forEach(([key, value]) => {
+			process.env[key] = value;
+		});
+
 		sinon.stub(SQSClient.prototype, 'send').resolves(true);
 	});
 
 	afterEach(() => {
+		process.env = oldEnv;
 		sinon.restore();
 	});
 
 	it('Should return expected configuration', () => {
 
+		const SQS_BASE_URL = 'https://sqs.${aws:region}.amazonaws.com';
+
+		process.env.SQS_BASE_URL = SQS_BASE_URL;
+
 		assert.deepEqual(Notification.serverlessConfiguration, [
 			['envVars', {
-				SQS_BASE_URL: 'https://sqs.${aws:region}.amazonaws.com',
-				NOTIFICATION_ACCOUNT_ID: '012345678901'
+				SQS_BASE_URL,
+				NOTIFICATION_ACCOUNT_ID: env.NOTIFICATION_ACCOUNT_ID
 			}],
 
 			['iamStatement', {
 				action: ['sqs:SendMessage'],
-				resource: 'arn:aws:sqs:${aws:region}:012345678901:*'
+				resource: `arn:aws:sqs:\${aws:region}:${env.NOTIFICATION_ACCOUNT_ID}:*`
 			}]
 		]);
 	});
 
 	describe('When validation fails', () => {
 
-		it('Should reject if JANIS_SERVICE_NAME is not defined', async () => {
+		Object.keys(env).forEach(envVarName => {
+			it(`Should reject if ${envVarName} is not defined`, async () => {
 
-			process.env.JANIS_SERVICE_NAME = '';
+				process.env[envVarName] = '';
 
-			const notificationInstance = new Notification();
+				const notificationInstance = new Notification();
 
-			await assert.rejects(notificationInstance.send(), { message: 'JANIS_SERVICE_NAME variable is not defined' });
+				await assert.rejects(notificationInstance.send(), { message: `${envVarName} variable is not defined` });
+			});
 		});
 
-		it('Should reject if SQS_BASE_URL is not defined', async () => {
-
-			process.env.SQS_BASE_URL = '';
-
-			const notificationInstance = new Notification();
-
-			await assert.rejects(notificationInstance.send(), { message: 'SQS_BASE_URL variable is not defined' });
-		});
-
-		it('Should reject if NOTIFICATION_ACCOUNT_ID is not defined', async () => {
-
-			process.env.NOTIFICATION_ACCOUNT_ID = '';
-
-			const notificationInstance = new Notification();
-
-			await assert.rejects(notificationInstance.send(), { message: 'NOTIFICATION_ACCOUNT_ID variable is not defined' });
-		});
-
-		it('Should reject if not passing notification parameter in send method', async () => {
+		it('Should reject if notification parameter is not passed to send method', async () => {
 
 			const notificationInstance = new Notification();
 
 			await assert.rejects(notificationInstance.send());
 		});
 
-		it('Should reject if not passing notification.event in send method parameter', async () => {
+		it('Should reject if notification.event is not passed to send method as parameter', async () => {
 
 			const notificationInstance = new Notification();
 
 			await assert.rejects(notificationInstance.send({ entity: 'entityName', body: { id: '132456' } }));
 		});
 
-		it('Should reject if not passing notification.entity in send method parameter', async () => {
+		it('Should reject if notification.entity is not passed to send method as a parameter', async () => {
 
 			const notificationInstance = new Notification();
 
@@ -92,7 +89,7 @@ describe('Notification', () => {
 
 		['event', 'entity', 'body'].forEach(property => {
 
-			it(`Should reject if passing invalid notification.${property} in send method parameter`, async () => {
+			it(`Should reject if invalid notification.${property} is passed to send method as parameter`, async () => {
 
 				const notificationInstance = new Notification();
 
