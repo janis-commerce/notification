@@ -1,5 +1,9 @@
 # notification
 
+![Build Status](https://github.com/janis-commerce/notification/workflows/Build%20Status/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/janis-commerce/notification/badge.svg?branch=master)](https://coveralls.io/github/janis-commerce/notification?branch=master)
+[![npm version](https://badge.fury.io/js/%40janiscommerce%2Fnotification.svg)](https://www.npmjs.com/package/@janiscommerce/notification)
+
 A package to send notifications to Janis Notification service
 
 ## Installation
